@@ -8,6 +8,21 @@ export class ContactForm extends Component {
     number: '',
   };
 
+  componentDidMount() {
+    // Load contacts from local storage when the component mounts
+    const storedContacts = localStorage.getItem('contacts');
+    if (storedContacts) {
+      this.setState({ contacts: JSON.parse(storedContacts) });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    // Update local storage when contacts change
+    if (prevState.contacts !== this.state.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
+
   inputChangeValue = e => {
     const newUsername = e.target.value;
     const key = e.target.name;
