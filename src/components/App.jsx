@@ -1,10 +1,11 @@
-
 import React, { Component } from 'react';
 import { nanoid } from 'nanoid';
 import { ContactForm } from './ContactForm/ContactForm';
 import { ContactList } from './ContactList/ContactList';
 import { Filter } from './Filter/Filter';
 import { Container } from './App.styled';
+
+const STORAGE_KEY = 'contacts';
 
 export class App extends Component {
   state = {
@@ -16,6 +17,20 @@ export class App extends Component {
     ],
     filter: '',
   };
+
+  componentDidMount() {
+    const localSavedData = localStorage.getItem(STORAGE_KEY);
+    if (localSavedData) {
+      this.setState({ contacts: JSON.parse(localSavedData) });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+      console.log('This product was updated');
+    }
+  }
 
   inputChangeValue = e => {
     return this.setState({
